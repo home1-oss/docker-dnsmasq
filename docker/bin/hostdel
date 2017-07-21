@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+hostname="$1"
+ip="$2"
+echo "hostdel hostname:'${hostname}', ip:'${ip}'"
+
+echo "before 'hostdel ${hostname} ${ip}'"
+cat /media/hosts
+
+if [ -z "${hostname}" ]; then printf "no hostname specified"; exit 1; fi
+if [ -z "${ip}" ]; then
+    sed -i -E "/^.+ ${hostname}\$/d" /media/hosts
+else
+    sed -i "/${ip} ${hostname}/d" /media/hosts
+fi
+
+echo "after 'hostdel ${hostname} ${ip}'"
+cat /media/hosts
+
+echo "reload config"
+kill -s HUP $(ps aux | grep dnsmasq | grep -v grep | awk '{print $1}')

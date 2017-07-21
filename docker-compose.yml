@@ -1,0 +1,31 @@
+
+version: '2.1'
+services:
+  dnsmasq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: home1oss/dnsmasq:2.76
+    cap_add:
+    - NET_ADMIN
+    command: ["dnsmasq", "-k", "--addn-hosts=/media/hosts", "-q", "--log-facility=-"]
+    container_name: ${DNSMASQ_DOMAIN:-dnsmasq}.${INFRASTRUCTURE:-local}
+    #dns:
+    #- 8.8.8.8
+    hostname: ${DNSMASQ_DOMAIN:-dnsmasq}.${INFRASTRUCTURE:-local}
+    #network_mode: "host"
+    ports:
+    - "53:53/tcp"
+    - "53:53/udp"
+    restart: unless-stopped
+    volumes:
+    #- ./conf:/media
+    - volume-dnsmasq:/media
+
+networks:
+  default:
+    external:
+      name: oss-network
+
+volumes:
+  volume-dnsmasq: {}

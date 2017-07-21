@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+hostname="$1"
+ip="$2"
+echo "hostadd hostname:'${hostname}', ip:'${ip}'"
+
+echo "before 'hostadd ${hostname} ${ip}'"
+cat /media/hosts
+
+if [ -z "${hostname}" ] || [ -z "${ip}" ]; then printf "no hostname or ip specified"; exit 1; fi
+if grep -o -Fx "${ip} ${hostname}" /media/hosts; then
+    printf "'${ip} ${hostname}' already exists\n"
+else
+    printf "${ip} ${hostname}\n" >> /media/hosts
+fi
+
+echo "after 'hostadd ${hostname} ${ip}'"
+cat /media/hosts
+
+echo "reload config"
+kill -s HUP $(ps aux | grep dnsmasq | grep -v grep | awk '{print $1}')

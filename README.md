@@ -1,7 +1,7 @@
 # docker-dnsmask
 A simple container run `dnsmasq -k` (run at foreground) by default.
 
-## Add remove hosts
+## Add/remove hosts
 
 Edit hosts config
 
@@ -16,7 +16,7 @@ Send signal to reload hosts config
 docker kill -s HUP dnsmasq.local
 ```
 
-## extra commands (boot options)
+## Extra commands (boot options)
 
 + `--log-facility=-` out put logs to console (stdout) 
 
@@ -29,6 +29,6 @@ nameserver <nameserver_ip1>
 nameserver <nameserver_ip2>
 ```
 
-## debug
+## Debug
 
 `docker run --rm -it --cap-add=NET_ADMIN home1oss/dnsmasq:2.76 /bin/bash`
